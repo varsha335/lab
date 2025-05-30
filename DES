@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+unsigned int feistel(unsigned int half, unsigned int key) {
+    return (half ^ key);
+}
+
+unsigned int tinyDES(unsigned int block, unsigned int key) {
+    unsigned int L = block >> 16, R = block & 0xFFFF, temp;
+    for (int i = 0; i < 4; i++) {
+        temp = R;
+        R = L ^ feistel(R, key);
+        L = temp;
+    }
+    return (R << 16) | L;
+}
+
+int main() {
+    unsigned int pt = 0x12345678, key = 0xABCD;
+    unsigned int ct = tinyDES(pt, key);
+    printf("Ciphertext: %08X\n", ct);
+    return 0;
+}
