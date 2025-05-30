@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char data[] = "HELLO123"; 
+    char key = 7; // simple XOR key
+    int i;
+
+    // Encrypt (ECB style — independent block/byte operation)
+    for(i=0; data[i]; i++) data[i] ^= key;
+    printf("Encrypted: %s\n", data);
+
+    // Decrypt
+    for(i=0; data[i]; i++) data[i] ^= key;
+    printf("Decrypted: %s\n", data);
+
+    return 0;
+}
