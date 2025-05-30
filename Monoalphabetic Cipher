@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+// Function to encrypt the plaintext using substitution key
+void encrypt(char plaintext[], char key[], char ciphertext[]) {
+    int i;
+    for (i = 0; plaintext[i] != '\0'; i++) {
+        if (isupper(plaintext[i]))
+            ciphertext[i] = toupper(key[plaintext[i] - 'A']);
+        else if (islower(plaintext[i]))
+            ciphertext[i] = tolower(key[plaintext[i] - 'a']);
+        else
+            ciphertext[i] = plaintext[i];
+    }
+    ciphertext[i] = '\0';
+}
+
+// Function to decrypt the ciphertext using substitution key
+void decrypt(char ciphertext[], char key[], char plaintext[]) {
+    int i, j;
+    char reverseKey[26];
+
+    // Create reverse key mapping
+    for (i = 0; i < 26; i++) {
+        reverseKey[toupper(key[i]) - 'A'] = 'A' + i;
+    }
+
+    for (i = 0; ciphertext[i] != '\0'; i++) {
+        if (isupper(ciphertext[i]))
+            plaintext[i] = reverseKey[ciphertext[i] - 'A'];
+        else if (islower(ciphertext[i]))
+            plaintext[i] = tolower(reverseKey[toupper(ciphertext[i]) - 'A']);
+        else
+            plaintext[i] = ciphertext[i];
+    }
+    plaintext[i] = '\0';
+}
+
+int main() {
+    char plaintext[256], key[27], ciphertext[256], decryptedText[256];
+
+    printf("Enter a 26-letter key (A-Z unique mapping, no duplicates): ");
+    fgets(key, sizeof(key), stdin);
+    key[strcspn(key, "\n")] = '\0'; // remove trailing newline
+
+    if (strlen(key) != 26) {
+        printf("Error: Key must be 26 letters.\n");
+        return 1;
+    }
+
+    printf("Enter plaintext: ");
+    fgets(plaintext, sizeof(plaintext), stdin);
+    plaintext[strcspn(plaintext, "\n")] = '\0'; // remove trailing newline
+
+    encrypt(plaintext, key, ciphertext);
+    printf("\nEncrypted Text: %s\n", ciphertext);
+
+    decrypt(ciphertext, key, decryptedText);
+    printf("Decrypted Text: %s\n", decryptedText);
+
+    return 0;
+}
