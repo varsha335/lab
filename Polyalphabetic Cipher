@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+// Function to encrypt the plaintext using the key
+void encrypt(char plaintext[], char key[], char ciphertext[]) {
+    int i, j;
+    int textLen = strlen(plaintext);
+    int keyLen = strlen(key);
+
+    for (i = 0, j = 0; i < textLen; i++) {
+        if (isalpha(plaintext[i])) {
+            char offset = isupper(plaintext[i]) ? 'A' : 'a';
+            char keyChar = toupper(key[j % keyLen]) - 'A';
+            ciphertext[i] = ((plaintext[i] - offset + keyChar) % 26) + offset;
+            j++;
+        } else {
+            ciphertext[i] = plaintext[i];
+        }
+    }
+    ciphertext[textLen] = '\0';
+}
+
+// Function to decrypt the ciphertext using the key
+void decrypt(char ciphertext[], char key[], char plaintext[]) {
+    int i, j;
+    int textLen = strlen(ciphertext);
+    int keyLen = strlen(key);
+
+    for (i = 0, j = 0; i < textLen; i++) {
+        if (isalpha(ciphertext[i])) {
+            char offset = isupper(ciphertext[i]) ? 'A' : 'a';
+            char keyChar = toupper(key[j % keyLen]) - 'A';
+            plaintext[i] = ((ciphertext[i] - offset - keyChar + 26) % 26) + offset;
+            j++;
+        } else {
+            plaintext[i] = ciphertext[i];
+        }
+    }
+    plaintext[textLen] = '\0';
+}
+
+int main() {
+    char plaintext[256], key[256], ciphertext[256], decryptedText[256];
+
+    printf("Enter plaintext: ");
+    fgets(plaintext, sizeof(plaintext), stdin);
+    plaintext[strcspn(plaintext, "\n")] = '\0'; // Remove trailing newline
+
+    printf("Enter key (letters only): ");
+    fgets(key, sizeof(key), stdin);
+    key[strcspn(key, "\n")] = '\0'; // Remove trailing newline
+
+    encrypt(plaintext, key, ciphertext);
+    printf("\nEncrypted Text: %s\n", ciphertext);
+
+    decrypt(ciphertext, key, decryptedText);
+    printf("Decrypted Text: %s\n", decryptedText);
+
+    return 0;
+}
