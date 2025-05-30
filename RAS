@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int modPow(int base, int exp, int mod) {
+    int res = 1;
+    while (exp--) res = (res * base) % mod;
+    return res;
+}
+
+int modInverse(int e, int phi) {
+    for (int d = 1; d < phi; d++)
+        if ((e * d) % phi == 1) return d;
+    return -1;
+}
+
+int main() {
+    int p = 3, q = 11, n = p * q, phi = (p - 1) * (q - 1);
+    int e = 7, d = modInverse(e, phi);
+    int msg = 9;
+
+    int enc = modPow(msg, e, n);
+    int dec = modPow(enc, d, n);
+
+    printf("Msg:%d Encrypted:%d Decrypted:%d\n", msg, enc, dec);
+    return 0;
+}
