@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+int main() {
+    char msg[3] = "HI";          // Message (2 letters)
+    char key[5] = "GYBN";        // Key (4 letters)
+    int keyMat[2][2], msgVec[2], cipherVec[2];
+
+    for (int i = 0, k = 0; i < 2; i++)         // Create key matrix
+        for (int j = 0; j < 2; j++)
+            keyMat[i][j] = key[k++] - 'A';
+
+    for (int i = 0; i < 2; i++)                // Create message vector
+        msgVec[i] = msg[i] - 'A';
+
+    for (int i = 0; i < 2; i++) {              // Multiply matrices
+        cipherVec[i] = 0;
+        for (int j = 0; j < 2; j++)
+            cipherVec[i] += keyMat[i][j] * msgVec[j];
+        cipherVec[i] = cipherVec[i] % 26;
+    }
+
+    printf("Encrypted: ");
+    for (int i = 0; i < 2; i++)
+        printf("%c", cipherVec[i] + 'A');
+    printf("\n");
+
+    return 0;
+}
