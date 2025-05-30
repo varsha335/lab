@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int main() {
+    char text[100];
+    int shift, i;
+
+    printf("Enter plaintext (uppercase): ");
+    scanf("%s", text);
+
+    printf("Enter shift (0–25): ");
+    scanf("%d", &shift);
+
+    printf("Encrypted text: ");
+    for (i = 0; text[i] != '\0'; i++) {
+        char c = ((text[i] - 'A' + shift) % 26) + 'A';
+        printf("%c", c);
+    }
+    printf("\n");
+
+    return 0;
+}
